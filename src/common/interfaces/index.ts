@@ -1,14 +1,17 @@
 import { Direction } from '../enums/direction.ts';
 
-export interface SnakePart {
+export interface BaseCoords {
     x: number;
     y: number;
 }
 
+export interface SnakePart extends BaseCoords {}
+export interface FoodPart extends BaseCoords {}
+
 export interface GameContextProps {
     snake: SnakePart[];
     direction: Direction;
-    food: SnakePart;
+    food: FoodPart;
     score: number;
     speed: number;
     moveSnake: () => void;

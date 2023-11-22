@@ -5,7 +5,7 @@ export const Score: React.FC = () => {
   const { score } = useGameContext();
 
   return (
-    <span className="text-6xl">
+    <span className="text-5xl">
       {`Score: ${score}`}
     </span>
   );
