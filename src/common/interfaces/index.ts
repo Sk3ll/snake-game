@@ -16,4 +16,5 @@ export interface GameContextProps {
     speed: number;
     moveSnake: () => void;
     handleKeyPress: (e: KeyboardEvent) => void;
+    setDirection: (dir: Direction) => void;
 }

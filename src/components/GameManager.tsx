@@ -2,11 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { CANVAS_SIZE, CELL_SIZE } from '../common/constants';
 import { useGameContext } from '../hooks/useGameContext';
 import { Score } from './Score';
+import { Direction } from '../common/enums/direction.ts';
 
 const GameManager: React.FC = () => {
   const {
-    snake, food, speed, moveSnake, handleKeyPress,
+    snake, food, speed, moveSnake, handleKeyPress, setDirection,
   } = useGameContext();
+  const isMobile = navigator.userAgent.match(/iPhone/i);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -55,6 +57,16 @@ const GameManager: React.FC = () => {
     <div className="flex flex-col gap-y-[5rem]">
       <Score />
       <canvas ref={canvasRef} width={CANVAS_SIZE} height={CANVAS_SIZE} className="outline-dashed" />
+
+      {isMobile && (
+      <div className="grid grid-cols-3 grid-rows-2 gap-4">
+        <button className="col-start-2 outline-dashed" type="button" onClick={() => setDirection(Direction.UP)}>Up</button>
+        <button className="row-start-2 outline-dashed" type="button" onClick={() => setDirection(Direction.LEFT)}>Left</button>
+        <button className="row-start-2 outline-dashed" type="button" onClick={() => setDirection(Direction.DOWN)}>DOWN</button>
+        <button className="row-start-2 outline-dashed" type="button" onClick={() => setDirection(Direction.RIGHT)}>Right</button>
+      </div>
+      )}
+
     </div>
   );
 };

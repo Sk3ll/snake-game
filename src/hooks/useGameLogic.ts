@@ -81,6 +81,6 @@ export const useGameLogic = () => {
   );
 
   return {
-    snake, direction, food, score, speed, moveSnake, handleKeyPress,
+    snake, direction, food, score, speed, moveSnake, handleKeyPress, setDirection,
   };
 };
