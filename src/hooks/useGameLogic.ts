@@ -1,30 +1,36 @@
 import { useCallback, useState } from 'react';
-import { SnakePart } from '../common/interfaces';
-import { Direction } from '../common/enums/direction.ts';
-import { getSize, randomPosition } from '../common/utils';
+import { FoodEntity, GameContextProps, SnakeEntity } from '../common/interfaces';
+import { Direction } from '../common/enums/direction';
+import {
+  generateNewFood,
+  generateNewSnake,
+  getSize,
+  isCrossedCoords,
+  isCrossedEntities,
+  randomDirection,
+} from '../common/utils';
 
-export const useGameLogic = () => {
-  const [snake, setSnake] = useState<SnakePart[]>([{ x: 10, y: 10 }]);
-  const [direction, setDirection] = useState<Direction>(Direction.RIGHT);
-  const [food, setFood] = useState<SnakePart>({ x: 5, y: 5 });
-  const [score, setScore] = useState<number>(0);
-  const [speed, setSpeed] = useState<number>(250);
+export const useGameLogic = (): GameContextProps => {
+  const defaultSpeed = 250;
+  const defaultScore = 0;
 
-  const moveSnake = useCallback(() => {
-    const generateNewFood = () => {
-      let newFood: SnakePart;
-      do {
-        newFood = {
-          x: randomPosition(),
-          y: randomPosition(),
-        };
-        // Check would food be snake part
-        // eslint-disable-next-line no-loop-func
-      } while (snake.some((part) => part.x === newFood.x && part.y === newFood.y));
+  const [snake, setSnake] = useState<SnakeEntity[]>(generateNewSnake());
+  const [food, setFood] = useState<FoodEntity>(generateNewFood(snake));
+  const [direction, setDirection] = useState<Direction>(randomDirection());
+  const [score, setScore] = useState<number>(defaultScore);
+  const [speed, setSpeed] = useState<number>(defaultSpeed);
 
-      setFood(newFood);
-    };
+  const onGameOver = useCallback(() => {
+    // eslint-disable-next-line no-alert
+    alert('Game Over!');
+    setSnake(generateNewSnake());
+    setFood(generateNewFood(snake));
+    setDirection(randomDirection());
+    setScore(defaultScore);
+    setSpeed(defaultSpeed);
+  }, [snake]);
 
+  const moveSnake = useCallback((intervalId: NodeJS.Timeout) => {
     const newSnake = [...snake];
     const head = { ...newSnake[0] };
 
@@ -37,17 +43,17 @@ export const useGameLogic = () => {
     directionHandlers[direction]();
 
     // Check handle with snake body
-    if (newSnake.slice(1).some((part) => part.x === head.x && part.y === head.y)) {
-      // eslint-disable-next-line no-alert
-      alert('Game Over!');
-      window.location.reload(); // Reboot game
+    if (isCrossedEntities(newSnake.slice(1), head)) {
+      onGameOver();
+      clearInterval(intervalId);
+      return;
     }
 
     newSnake.unshift(head);
 
-    if (head.x === food.x && head.y === food.y) {
+    if (isCrossedCoords(head, food)) {
       // Snake ate the food, generate new food
-      generateNewFood();
+      setFood(generateNewFood(snake));
 
       // Increase score
       setScore(score + 50);
@@ -62,7 +68,7 @@ export const useGameLogic = () => {
     }
 
     setSnake(newSnake);
-  }, [snake, direction, food.x, food.y, score, speed]);
+  }, [snake, direction, onGameOver, food, score, speed]);
 
   const handleKeyPress = useCallback(
     (e: KeyboardEvent) => {
@@ -73,11 +79,20 @@ export const useGameLogic = () => {
         ArrowRight: Direction.RIGHT,
       };
 
-      if (directionMap[e.key]) {
+      const oppositeDirection: Record<string, Direction> = {
+        ArrowUp: Direction.DOWN,
+        ArrowDown: Direction.UP,
+        ArrowLeft: Direction.RIGHT,
+        ArrowRight: Direction.LEFT,
+      };
+
+      const checkOppositeDirection = snake.length !== 1 && oppositeDirection[e.key] !== direction;
+
+      if ((directionMap[e.key] && snake.length === 1) || checkOppositeDirection) {
         setDirection(directionMap[e.key]);
       }
     },
-    [setDirection],
+    [setDirection, direction, snake.length],
   );
 
   return {

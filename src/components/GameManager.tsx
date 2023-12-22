@@ -1,14 +1,22 @@
+'use client';
+
 import React, { useEffect, useRef } from 'react';
-import { CANVAS_SIZE, CELL_SIZE } from '../common/constants';
+
+import { CANVAS_SIZE } from '../common/constants';
 import { useGameContext } from '../hooks/useGameContext';
 import { Score } from './Score';
-import { Direction } from '../common/enums/direction.ts';
+import { Direction } from '../common/enums/direction';
+import { drawEntity } from '../common/utils';
+import { Color } from '../common/enums/color';
+import { Button } from './Button';
+import { Footer } from './Footer';
 
 const GameManager: React.FC = () => {
   const {
     snake, food, speed, moveSnake, handleKeyPress, setDirection,
   } = useGameContext();
-  const isMobile = navigator.userAgent.match(/iPhone/i);
+
+  const isMobile = window.navigator.userAgent.match(/iPhone|Android|iPad/i);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -23,13 +31,12 @@ const GameManager: React.FC = () => {
 
         // Draw the snake
         snake.forEach((part, index) => {
-          ctx.fillStyle = index === 0 ? 'darkgreen' : 'green';
-          ctx.fillRect(part.x * CELL_SIZE + 1, part.y * CELL_SIZE + 1, CELL_SIZE - 2, CELL_SIZE - 2);
+          const color: Color = index === 0 ? Color.DARKGREEN : Color.GREEN;
+          drawEntity(ctx, part, color);
         });
 
         // Draw the food
-        ctx.fillStyle = 'red';
-        ctx.fillRect(food.x * CELL_SIZE + 1, food.y * CELL_SIZE + 1, CELL_SIZE - 2, CELL_SIZE - 2);
+        drawEntity(ctx, food, Color.RED);
       }
     }
   }, [snake, food]);
@@ -37,7 +44,7 @@ const GameManager: React.FC = () => {
   // Game loop
   useEffect(() => {
     const intervalId = setInterval(() => {
-      moveSnake();
+      moveSnake(intervalId);
     }, speed);
 
     return () => {
@@ -54,18 +61,24 @@ const GameManager: React.FC = () => {
   }, [handleKeyPress]);
 
   return (
-    <div className="flex flex-col gap-y-[5rem]">
+    <div className="flex flex-col gap-y-[1.5rem]">
       <Score />
       <canvas ref={canvasRef} width={CANVAS_SIZE} height={CANVAS_SIZE} className="outline-dashed" />
 
       {isMobile && (
       <div className="grid grid-cols-3 grid-rows-2 gap-4">
-        <button className="col-start-2 outline-dashed" type="button" onClick={() => setDirection(Direction.UP)}>Up</button>
-        <button className="row-start-2 outline-dashed" type="button" onClick={() => setDirection(Direction.LEFT)}>Left</button>
-        <button className="row-start-2 outline-dashed" type="button" onClick={() => setDirection(Direction.DOWN)}>DOWN</button>
-        <button className="row-start-2 outline-dashed" type="button" onClick={() => setDirection(Direction.RIGHT)}>Right</button>
+          {Object.values(Direction).map((direction: Direction) => (
+            <Button
+              key={direction}
+              className={`${direction === Direction.UP ? 'col-start-2' : 'row-start-2'}`}
+              onClick={() => setDirection(direction)}
+            >
+              {direction}
+            </Button>
+          ))}
       </div>
       )}
+      <Footer />
 
     </div>
   );

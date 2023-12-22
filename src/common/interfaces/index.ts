@@ -1,20 +1,20 @@
-import { Direction } from '../enums/direction.ts';
+import { Direction } from '../enums/direction';
 
-export interface BaseCoords {
+export interface BaseEntity {
     x: number;
     y: number;
 }
 
-export interface SnakePart extends BaseCoords {}
-export interface FoodPart extends BaseCoords {}
+export interface SnakeEntity extends BaseEntity {}
+export interface FoodEntity extends BaseEntity {}
 
 export interface GameContextProps {
-    snake: SnakePart[];
+    snake: SnakeEntity[];
     direction: Direction;
-    food: FoodPart;
+    food: FoodEntity;
     score: number;
     speed: number;
-    moveSnake: () => void;
+    moveSnake: (intervalId: NodeJS.Timeout) => void;
     handleKeyPress: (e: KeyboardEvent) => void;
     setDirection: (dir: Direction) => void;
 }

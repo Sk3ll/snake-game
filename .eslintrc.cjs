@@ -6,6 +6,7 @@ module.exports = {
     'airbnb/hooks',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    'next/core-web-vitals',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
@@ -15,6 +16,8 @@ module.exports = {
     'no-return-assign': 0,
     'import/no-unresolved': 0,
     'import/extensions': 0,
+    'import/no-anonymous-default-export': 0,
+    'react/require-default-props': 0,
     'react/jsx-filename-extension': [1, { extensions: ['.ts', '.tsx'] }],
     'react/function-component-definition': [2, { namedComponents: 'arrow-function' }],
     'react-refresh/only-export-components': [

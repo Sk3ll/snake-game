@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, PropsWithChildren } from 'react';
 import { useGameLogic } from '../hooks/useGameLogic';
 import { GameContextProps } from '../common/interfaces';
