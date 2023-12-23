@@ -1,23 +1,23 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { CANVAS_SIZE } from '../common/constants';
 import { useGameContext } from '../hooks/useGameContext';
 import { Score } from './Score';
-import { Direction } from '../common/enums/direction';
+import { Direction, Color } from '../common/enums';
 import { drawEntity } from '../common/utils';
-import { Color } from '../common/enums/color';
 import { Button } from './Button';
 import { Footer } from './Footer';
+import { useSocket } from '../hooks/useSocket';
 
 const GameManager: React.FC = () => {
   const {
     snake, food, speed, moveSnake, handleKeyPress, setDirection,
   } = useGameContext();
+  const socket = useSocket();
 
-  const isMobile = window.navigator.userAgent.match(/iPhone|Android|iPad/i);
-
+  const [isMobile, setMobile] = useState(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -59,6 +59,14 @@ const GameManager: React.FC = () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
   }, [handleKeyPress]);
+
+  useEffect(() => () => {
+    setMobile(window.navigator.userAgent.match(/iPhone|Android|iPad/i));
+  }, []);
+
+  useEffect(() => {
+    socket.init();
+  }, [socket]);
 
   return (
     <div className="flex flex-col gap-y-[1.5rem]">

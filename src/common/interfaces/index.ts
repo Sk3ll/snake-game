@@ -1,4 +1,6 @@
-import { Direction } from '../enums/direction';
+import { Direction } from '../enums';
+
+export * from './socket.interface';
 
 export interface BaseEntity {
     x: number;

@@ -18,6 +18,8 @@ module.exports = {
     'import/extensions': 0,
     'import/no-anonymous-default-export': 0,
     'react/require-default-props': 0,
+    'react/jsx-props-no-spreading': 0,
+    'class-methods-use-this': 0,
     'react/jsx-filename-extension': [1, { extensions: ['.ts', '.tsx'] }],
     'react/function-component-definition': [2, { namedComponents: 'arrow-function' }],
     'react-refresh/only-export-components': [

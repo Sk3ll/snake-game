@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { FoodEntity, GameContextProps, SnakeEntity } from '../common/interfaces';
-import { Direction } from '../common/enums/direction';
+import { Direction } from '../common/enums';
 import {
   generateNewFood,
   generateNewSnake,
