@@ -4,7 +4,7 @@ import type { NextApiRequest } from 'next';
 import type { SocketResponse } from '../../common/interfaces';
 import { SocketGateway } from '../../gateways/socket.gateway';
 import { BASE_SOCKET_CONFIG } from '../../common/constants';
-import { catchWrapper } from '../../common/utils';
+import { catchWrapper, logger } from '../../common/utils';
 import { HttpCodes } from '../../common/enums';
 
 const defaultPort = 3005;
@@ -16,7 +16,7 @@ export default catchWrapper(async (_: NextApiRequest, res: SocketResponse) => {
     return;
   }
 
-  console.log('Starting Socket.IO server on port:', PORT);
+  logger.info(`Starting Socket.IO server on port: ${PORT}`);
 
   res.socket.server.io = new SocketGateway(BASE_SOCKET_CONFIG).listen(PORT);
 

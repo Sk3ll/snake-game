@@ -11,8 +11,8 @@ interface ButtonProps {
 export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
   onClick, className, children,
 }) => {
-  const style = 'outline-dashed text-xl py-1';
-  const styles = twMerge(className, style);
+  const defaultStyle = 'outline-dashed rounded text-xl py-1 px-[1.2rem]';
+  const styles = twMerge(defaultStyle, className);
 
   return (
     <button

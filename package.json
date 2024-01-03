@@ -5,8 +5,17 @@
   "type": "module",
   "author": "Yaroslav Malykhin",
   "license": "MIT",
+  "url": "https://github.com/Sk3ll",
+  "funding": "https://www.buymeacoffee.com/sk3llyarm",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:MICommunity/ComplexViewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Sk3ll/snake-game/issues"
+  },
   "scripts": {
-    "dev": "next dev -p 3005 --turbo",
+    "start:dev": "next dev -p 3005 --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -14,6 +23,8 @@
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
     "next": "^14.0.4",
+    "pino": "^8.17.2",
+    "pino-pretty": "^10.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",

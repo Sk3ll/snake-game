@@ -5,6 +5,8 @@ export * from './calculations';
 export * from './drawEntity';
 export * from './catchWrapper';
 export * from './errorHandler';
+export * from './logger';
+export * from './swap';
 
 export const isCrossedCoords = (snake: SnakeEntity, food: FoodEntity) => snake.x === food.x && snake.y === food.y;
 

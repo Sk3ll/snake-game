@@ -1,17 +1,51 @@
 'use client';
 
-import React from 'react';
-import { GameProvider } from '../providers/GameProvider';
-import { GameManager } from '../components/GameManager';
-import { SocketProvider } from '../providers/SocketProvider';
-import { Compose } from '../components/Compose';
+import React, { FC, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '../components/Button';
+import { Input } from '../components/Input';
 
-const providers = [SocketProvider, GameProvider];
+const MainMenu: FC = () => {
+  const router = useRouter();
+  const [inputValue, setValue] = useState('');
+  const [error, setError] = useState(false);
 
-const App: React.FC = () => (
-  <Compose providers={providers}>
-    <GameManager />
-  </Compose>
-);
+  const onNewGameClick = useCallback(() => {
+    if (inputValue !== '') {
+      setError(false);
+      router.push(`game?user=${inputValue}`);
+    } else {
+      setError(true);
+    }
+  }, [inputValue, router]);
 
-export default App;
+  const buttons = [{
+    title: 'New Game',
+    onClick: onNewGameClick,
+  }, {
+    title: 'Top rank',
+    onClick: () => {},
+  }];
+
+  return (
+    <>
+      <Input
+        label="username"
+        value={inputValue}
+        onChange={setValue}
+        error={error ? 'Username is require' : null}
+      />
+
+      {buttons.map((button) => (
+        <Button
+          key={button.title}
+          onClick={button.onClick}
+        >
+          {button.title}
+        </Button>
+      ))}
+    </>
+  );
+};
+
+export default MainMenu;

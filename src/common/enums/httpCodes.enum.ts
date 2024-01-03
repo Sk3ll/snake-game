@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-shadow
 export enum HttpCodes {
     OK = 200,
     CREATED = 201,
