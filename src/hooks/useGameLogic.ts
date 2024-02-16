@@ -1,42 +1,39 @@
 import { useCallback, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FoodEntity, GameContextProps, PlayerEntity } from '../common/interfaces';
 import { SocketMessage } from '../common/enums';
 import { useSocket } from './useSocket';
 
 export const useGameLogic = (): GameContextProps => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const socket = useSocket();
 
-  const [player, setPlayer] = useState<PlayerEntity>(null);
+  const [players, setPlayers] = useState<PlayerEntity[]>([]);
   const [food, setFood] = useState<FoodEntity>(null);
 
   const handleKeyPress = useCallback(
     (e: KeyboardEvent) => {
-      if (player?.matchId && socket) {
-        socket.emit(SocketMessage.ON_KEY_PRESS, { directionKey: e.key, matchId: player.matchId });
+      if (searchParams.get('user') && socket) {
+        socket.emit(SocketMessage.ON_KEY_PRESS, { directionKey: e.key, matchId: searchParams.get('user') });
       }
     },
-    [player, socket],
+    [searchParams, socket],
   );
 
-  const updateCtx = useCallback((data: Partial<PlayerEntity> & Partial<GameContextProps>) => {
+  const updateCtx = useCallback((data: Pick<GameContextProps, 'food' | 'players'>) => {
     setFood(data.food);
-    setPlayer({
-      matchId: data.matchId,
-      snake: data.snake,
-      score: data.score,
-    });
+    setPlayers(data.players);
   }, []);
 
   const onBackClick = useCallback(() => {
     socket.disconnect();
-    setPlayer(null);
+    setPlayers(null);
     setFood(null);
     router.push('/');
   }, [router, socket]);
 
   return {
-    player, food, handleKeyPress, updateCtx, onBackClick,
+    players, food, handleKeyPress, updateCtx, onBackClick,
   };
 };

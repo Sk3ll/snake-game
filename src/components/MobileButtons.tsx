@@ -10,13 +10,13 @@ import { useGameContext } from '../hooks/useGameContext';
 
 export const MobileButtons = () => {
   const socket = useSocket();
-  const { player } = useGameContext();
+  // const { player } = useGameContext();
   const [isMobile, setMobile] = useState<RegExpMatchArray>(null);
 
-  const onChangeDirectionClick = useCallback((direction: Direction) => {
-    const swappedDirections: Record<Direction, string> = swap(DIRECTION_KEYS);
-    socket.emit(SocketMessage.ON_KEY_PRESS, { directionKey: swappedDirections[direction], matchId: player.matchId });
-  }, [player, socket]);
+  // const onChangeDirectionClick = useCallback((direction: Direction) => {
+  //   const swappedDirections: Record<Direction, string> = swap(DIRECTION_KEYS);
+  //   socket.emit(SocketMessage.ON_KEY_PRESS, { directionKey: swappedDirections[direction], matchId: player.matchId });
+  // }, [player, socket]);
 
   useEffect(() => () => {
     setMobile(window.navigator.userAgent.match(/iPhone|Android|iPad/i));
@@ -28,7 +28,8 @@ export const MobileButtons = () => {
       <Button
         key={direction}
         className={`${direction === Direction.UP ? 'col-start-2' : 'row-start-2'}`}
-        onClick={() => onChangeDirectionClick(direction)}
+        onClick={() => {}}
+        // onClick={() => onChangeDirectionClick(direction)}
       >
         {direction}
       </Button>

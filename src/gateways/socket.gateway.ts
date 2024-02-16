@@ -13,6 +13,7 @@ export class SocketGateway extends SocketIoServer {
     super({ cors: { origin: '*' }, ...config });
 
     this.on(SocketMessage.CONNECT, this.handleConnect.bind(this));
+    this.gameLogicService = new GameLogicService();
   }
 
   handleConnect(socket: Socket) {

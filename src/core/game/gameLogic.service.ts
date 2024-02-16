@@ -35,11 +35,10 @@ export class GameLogicService {
     const matchId = this.matchService.createMatch(newMatch);
     const snake = this.snakeService.generateNewSnake(matchId);
     const food = this.foodService.generateNewFood(snake.coords, matchId);
+    const players = this.snakeService.getAllSnakes();
     const data = {
-      matchId,
-      snake: snake.coords,
-      food: food?.coords,
-      score: snake.score,
+      players,
+      food,
     };
 
     socket.emit(SocketMessage.UPDATE_GAME, data);
@@ -77,7 +76,7 @@ export class GameLogicService {
 
       newSnake.unshift(head);
 
-      if (isCrossedCoords(head, food?.coords)) {
+      if (isCrossedCoords(head, food)) {
         // Snake ate the food, generate new food
         this.foodService.generateNewFood(newSnake, matchId);
 
@@ -95,13 +94,12 @@ export class GameLogicService {
         newSnake.pop();
       }
 
-      const snake = this.snakeService.setSnake(newSnake, matchId);
+      this.snakeService.setSnake(newSnake, matchId);
       const newFood = this.foodService.getFood(matchId);
+      const players = this.snakeService.getAllSnakes();
       const data = {
-        matchId,
-        snake: snake.coords,
-        food: newFood?.coords,
-        score: snake.score,
+        players,
+        food: newFood,
       };
 
       socket.emit(SocketMessage.UPDATE_GAME, data);
@@ -109,6 +107,7 @@ export class GameLogicService {
 
     socket.on(SocketMessage.DISCONNECT, () => {
       clearInterval(intervalId);
+      // this.snakeService.deleteSnake(matchId);
     });
   }
 
@@ -138,7 +137,7 @@ export class GameLogicService {
     return {
       matchId,
       snake: snake.coords,
-      food: newFood?.coords,
+      food: newFood,
       score: snake.score,
     };
   }

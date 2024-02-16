@@ -58,6 +58,10 @@ export class SnakeRepository {
     return snake.score;
   }
 
+  deleteSnake({ matchId }: PlayerDto) {
+    this.snakes.delete(matchId);
+  }
+
   private setEntity(en: Partial<SnakeEn>) {
     const existedSnake = this.snakes.get(en.matchId);
     const generatedSnake: SnakeEn = existedSnake ? { ...existedSnake, ...en } : {

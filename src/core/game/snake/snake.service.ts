@@ -15,6 +15,10 @@ export class SnakeService {
     this.matchId = matchId;
   }
 
+  getAllSnakes() {
+    return Array.from(this.snakeRepository.snakes.values());
+  }
+
   getSpeed(matchId: string = this.matchId) {
     return this.getSnake(matchId).speed;
   }
@@ -43,6 +47,11 @@ export class SnakeService {
 
   setScore(score: number, matchId: string = this.matchId) {
     this.snakeRepository.setScore(score, { matchId });
+    return this;
+  }
+
+  deleteSnake(matchId: string = this.matchId) {
+    this.snakeRepository.deleteSnake({ matchId });
     return this;
   }
 }

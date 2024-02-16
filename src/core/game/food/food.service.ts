@@ -10,7 +10,8 @@ export class FoodService {
   }
 
   getFood(matchId: string) {
-    return this.foodRepository.getFood(matchId);
+    // return this.foodRepository.getFood(matchId);
+    return this.foodRepository.food;
   }
 
   generateNewFood(snakeEntity: SnakeEntity[], matchId: string) {
@@ -22,6 +23,6 @@ export class FoodService {
       };
     } while (isCrossedEntities(snakeEntity, newFood));
 
-    return this.foodRepository.setFood(newFood, matchId);
+    return this.foodRepository.setFood(newFood);
   }
 }

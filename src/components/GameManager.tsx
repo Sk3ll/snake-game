@@ -14,7 +14,7 @@ import { MobileButtons } from './MobileButtons';
 const GameManager: React.FC = () => {
   useSocketListeners();
   const {
-    player,
+    players,
     food,
     handleKeyPress,
     onBackClick,
@@ -27,21 +27,23 @@ const GameManager: React.FC = () => {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
 
-      if (ctx && food && player?.snake.length) {
+      if (ctx && food && players?.length) {
         // Clear the canvas
         ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
         // Draw the snake
-        player.snake.forEach((part, index) => {
-          const color: Color = index === 0 ? Color.DARKGREEN : Color.GREEN;
-          drawEntity(ctx, part, color);
+        players.forEach((player) => {
+          player.coords.forEach((part, index) => {
+            const color: Color = index === 0 ? Color.DARKGREEN : Color.GREEN;
+            drawEntity(ctx, part, color);
+          });
         });
 
         // Draw the food
         drawEntity(ctx, food, Color.RED);
       }
     }
-  }, [player, food]);
+  }, [players, food]);
 
   // Snake controls
   useEffect(() => {

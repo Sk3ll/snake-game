@@ -1,4 +1,4 @@
-// import { Direction } from '../enums';
+import { Direction } from '../enums';
 
 export * from './socket.interface';
 
@@ -12,14 +12,14 @@ export interface FoodEntity extends BaseEntity {}
 
 export interface PlayerEntity {
     matchId: string;
-    // username: string;
-    // direction: Direction;
-    snake: SnakeEntity[];
+    coords: SnakeEntity[];
+    direction: Direction;
+    speed: number;
     score: number;
 }
 
 export interface GameContextProps {
-    player: PlayerEntity;
+    players: PlayerEntity[];
     food: FoodEntity;
     updateCtx: (data: Partial<GameContextProps>) => void;
     handleKeyPress: (e: KeyboardEvent) => void;
