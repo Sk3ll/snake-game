@@ -1,4 +1,1 @@
-npm run commitlint
 npm run lint
-
-exit 1
